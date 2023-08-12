@@ -1,10 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import { Button, View, TextInput, StyleSheet } from 'react-native';
+import { Button, View, TextInput, StyleSheet, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React from 'react'
+import {useEffect, useState} from 'react'
 
 export default function App() {
-  const [number, onChangeNumber] = React.useState(null);
+  const [changedNumber, onChangeNumber] = useState(null);
+  const [libraryCardNumber, setLibraryCardNumber] = useState(null);
 
   useEffect(() => {
     getData();
@@ -16,6 +17,7 @@ export default function App() {
       if (value !== null) {
         // value previously stored
         console.log('Here is the value: ', value)
+        setLibraryCardNumber(value)
       }
     } catch (e) {
       // error reading value
@@ -23,21 +25,59 @@ export default function App() {
     }
   };
 
+  const saveData = async (value) => {
+    try {
+      await AsyncStorage.setItem('library-card-number', value);
+      setLibraryCardNumber(value);
+    } catch (e) {
+      // saving error
+      console.log('There was an issue saving the value:', e)
+    }
+  };
+
+  const deleteData = async (value) => {
+    try {
+      await AsyncStorage.removeItem('library-card-number', value);
+      setLibraryCardNumber(null);
+    } catch (e) {
+      // saving error
+      console.log('There was an issue deleting the value:', e)
+    }
+  }
+
   return (
     <View style={styles.container}>
-      <TextInput 
-        onChangeText={onChangeNumber}
-        value={number}
-        placeholder="Enter your library card number here!"
-        keyboardType="numeric"
-        style={styles.libraryCardNumberInput}
-      />
-      <Button
-        onPress={() => {}}
-        title="Save library card number"
-        accessibilityLabel="Save library card number"
-        style={styles.saveButton}
-      />
+      {libraryCardNumber && (
+        <View>
+          <Text>
+            Here is your library card number: {libraryCardNumber}
+          </Text>
+          <Button
+            onPress={() => {deleteData()}}
+            title="Delete saved library card number"
+            accessibilityLabel="Delete library card number"
+            style={styles.deleteButton}
+          />
+        </View>
+      )
+      }
+      {!libraryCardNumber && (
+        <View>
+          <TextInput 
+          onChangeText={onChangeNumber}
+          value={changedNumber}
+          placeholder="Enter your library card number here!"
+          keyboardType="numeric"
+          style={styles.libraryCardNumberInput}
+        />
+        <Button
+          onPress={() => {saveData(changedNumber)}}
+          title="Save library card number"
+          accessibilityLabel="Save library card number"
+          style={styles.saveButton}
+        />
+        </View>
+      )}
       <StatusBar style="auto" />
     </View>
   );
