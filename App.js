@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { Button, View, TextInput, StyleSheet, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
+import Barcode from './Barcode'
 
 export default function App() {
   const [changedNumber, onChangeNumber] = useState(null);
@@ -16,7 +17,6 @@ export default function App() {
       const value = await AsyncStorage.getItem('library-card-number');
       if (value !== null) {
         // value previously stored
-        console.log('Here is the value: ', value)
         setLibraryCardNumber(value)
       }
     } catch (e) {
@@ -45,15 +45,63 @@ export default function App() {
     }
   }
 
+  function BarcodeChunk(props) {
+    const { binary, padding, options } = props;
+
+    // Creates the barcode out of the encoded binary
+    let yFrom;
+    if (options.textPosition == 'top') {
+      yFrom = options.fontSize + options.textMargin;
+    } else {
+      yFrom = 0;
+    }
+
+    let barWidth = 0;
+    let x = 0;
+    let bars = [];
+    for (var b = 0; b < binary.length; b++) {
+      x = b * options.width + padding;
+
+      if (binary[b] === '1') {
+        barWidth++;
+      } else if (barWidth > 0) {
+        bars.push({
+          x: x - options.width * barWidth,
+          y: yFrom,
+          width: options.width * barWidth,
+          height: options.height,
+        });
+        barWidth = 0;
+      }
+    }
+
+    // Last draw is needed since the barcode ends with 1
+    if (barWidth > 0) {
+      bars.push({
+        x: x - options.width * (barWidth - 1),
+        y: yFrom,
+        width: options.width * barWidth,
+        height: options.height,
+      });
+    }
+
+    return bars.map((bar, i) => {
+      return (
+        <Rect key={i} x={bar.x} y={bar.y} width={bar.width} height={bar.height} />
+      );
+    });
+  }
+
   return (
     <View style={styles.container}>
       {libraryCardNumber && (
         <View>
-          <Text>
-            Here is your library card number: {libraryCardNumber}
-          </Text>
+          <Barcode
+              value={libraryCardNumber}
+              options={{ format: 'codabar' }}
+            />
           <Button
-            onPress={() => {deleteData()}}
+            onPress={() => { deleteData() }}
             title="Delete saved library card number"
             accessibilityLabel="Delete library card number"
             style={styles.deleteButton}
@@ -63,19 +111,19 @@ export default function App() {
       }
       {!libraryCardNumber && (
         <View>
-          <TextInput 
-          onChangeText={onChangeNumber}
-          value={changedNumber}
-          placeholder="Enter your library card number here!"
-          keyboardType="numeric"
-          style={styles.libraryCardNumberInput}
-        />
-        <Button
-          onPress={() => {saveData(changedNumber)}}
-          title="Save library card number"
-          accessibilityLabel="Save library card number"
-          style={styles.saveButton}
-        />
+          <TextInput
+            onChangeText={onChangeNumber}
+            value={changedNumber}
+            placeholder="Enter your library card number here!"
+            keyboardType="numeric"
+            style={styles.libraryCardNumberInput}
+          />
+          <Button
+            onPress={() => { saveData(changedNumber) }}
+            title="Save library card number"
+            accessibilityLabel="Save library card number"
+            style={styles.saveButton}
+          />
         </View>
       )}
       <StatusBar style="auto" />
