@@ -1,12 +1,30 @@
 import { StatusBar } from 'expo-status-bar';
 import { Button, View, TextInput, StyleSheet, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useReducer } from 'react'
 import Barcode from './Barcode'
+
+const ACTIONS = {
+  SAVE: 'SAVE',
+  DELETE: 'DELETE',
+};
+
+function dataReducer(state, action) {
+  switch (action.type) {
+    case ACTIONS.SAVE:
+      return { ...state, libraryCardNumber: action.payload };
+    case ACTIONS.DELETE:
+      return { ...state, libraryCardNumber: null };
+    default:
+      return state;
+  }
+}
 
 export default function App() {
   const [changedNumber, onChangeNumber] = useState(null);
-  const [libraryCardNumber, setLibraryCardNumber] = useState(null);
+  const [state, dispatch] = useReducer(dataReducer, { libraryCardNumber: null });
+
+  const { libraryCardNumber } = state;
 
   useEffect(() => {
     getData();
@@ -17,7 +35,7 @@ export default function App() {
       const value = await AsyncStorage.getItem('library-card-number');
       if (value !== null) {
         // value previously stored
-        setLibraryCardNumber(value)
+        dispatch({ type: ACTIONS.SAVE, payload: value })
       }
     } catch (e) {
       // error reading value
@@ -28,7 +46,7 @@ export default function App() {
   const saveData = async (value) => {
     try {
       await AsyncStorage.setItem('library-card-number', value);
-      setLibraryCardNumber(value);
+      dispatch({ type: ACTIONS.SAVE, payload: value })
     } catch (e) {
       // saving error
       console.log('There was an issue saving the value:', e)
@@ -38,7 +56,7 @@ export default function App() {
   const deleteData = async (value) => {
     try {
       await AsyncStorage.removeItem('library-card-number', value);
-      setLibraryCardNumber(null);
+      dispatch({ type: ACTIONS.DELETE })
     } catch (e) {
       // saving error
       console.log('There was an issue deleting the value:', e)
