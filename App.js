@@ -4,12 +4,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState, useReducer } from 'react'
 import Barcode from './Barcode'
 
-const ACTIONS = {
+export const ACTIONS = {
   SAVE: 'SAVE',
   DELETE: 'DELETE',
 };
 
-function dataReducer(state, action) {
+export function dataReducer(state, action) {
   switch (action.type) {
     case ACTIONS.SAVE:
       return { ...state, libraryCardNumber: action.payload };
