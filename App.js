@@ -75,7 +75,7 @@ export default function App() {
             onPress={() => { deleteData() }}
             title="Delete saved library card number"
             accessibilityLabel="Delete library card number"
-            style={styles.deleteButton}
+            color="red"
           />
         </View>
       )
@@ -117,9 +117,5 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     padding: 10,
-  },
-  deleteButton: {
-    marginTop: 12,
-    marginBottom: 12,
-  },
+  }
 });
