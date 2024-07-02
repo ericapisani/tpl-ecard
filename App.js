@@ -50,9 +50,9 @@ export default function App() {
       {libraryCardNumber && (
         <View>
           <Barcode
-              value={libraryCardNumber}
-              options={{ format: 'codabar' }}
-            />
+            value={libraryCardNumber}
+            options={{ format: 'codabar' }}
+          />
           <Button
             onPress={() => { deleteData() }}
             title="Delete saved library card number"
@@ -64,11 +64,12 @@ export default function App() {
       }
       {!libraryCardNumber && (
         <View>
+          <Text>Enter your library card number below:</Text>
           <TextInput
             onChangeText={onChangeNumber}
             value={changedNumber}
-            placeholder="Enter your library card number here!"
             keyboardType="numeric"
+            multiline={true}
             style={styles.libraryCardNumberInput}
           />
           <Button
@@ -92,9 +93,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   libraryCardNumberInput: {
-    height: 80,
-    width: "75%",
+    // Numbers use 'pixel' as the metric
+    height: 40,
+    marginTop: 12,
+    marginBottom: 12,
     borderWidth: 1,
-    textAlign: "center"
-  }
+    padding: 10,
+  },
+  deleteButton: {
+    marginTop: 12,
+    marginBottom: 12,
+  },
 });
