@@ -20,11 +20,19 @@ export function dataReducer(state, action) {
   }
 }
 
+function createHeader() {
+  return (
+    <View style={styles.header}>
+      <h3>Unofficial Toronto Public Library E-card</h3>
+    </View>
+  );
+}
+
 function createFooter() {
   return (
     <View style={styles.footer}>
       Created by a library enthusiast 📚 <br />
-      <a href="https://github.com/ericapisani/tpl-ecard/">Github logo here</a>
+      <a href="https://github.com/ericapisani/tpl-ecard/">Source code can be found here</a>
     </View>
   );
 }
@@ -74,6 +82,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      {createHeader()}
       {libraryCardNumber && (
         <View style={styles.cardForm}>
           <Barcode
@@ -101,8 +110,8 @@ export default function App() {
           />
           <Button
             onPress={() => { saveData(changedNumber) }}
-            title="Save library card number"
-            accessibilityLabel="Save library card number"
+            title="Save library card number to phone"
+            accessibilityLabel="Save library card number to phone"
             style={styles.saveButton}
           />
         </View>
@@ -117,8 +126,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    //alignItems: 'center',
     justifyContent: 'space-evenly',
+  },
+  header: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   cardForm: {
     flexGrow: 5,
