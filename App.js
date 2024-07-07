@@ -20,6 +20,15 @@ export function dataReducer(state, action) {
   }
 }
 
+function createFooter() {
+  return (
+    <View style={styles.footer}>
+      Created by a library enthusiast 📚 <br />
+      <a href="https://github.com/ericapisani/tpl-ecard/">Github logo here</a>
+    </View>
+  );
+}
+
 export default function App() {
   const [changedNumber, onChangeNumber] = useState(null);
   const [state, dispatch] = useReducer(dataReducer, { libraryCardNumber: null });
@@ -66,7 +75,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       {libraryCardNumber && (
-        <View>
+        <View style={styles.cardForm}>
           <Barcode
             value={libraryCardNumber}
             options={{ format: 'codabar' }}
@@ -81,7 +90,7 @@ export default function App() {
       )
       }
       {!libraryCardNumber && (
-        <View>
+        <View style={styles.cardForm}>
           <Text>Enter your library card number below:</Text>
           <TextInput
             onChangeText={onChangeNumber}
@@ -99,6 +108,7 @@ export default function App() {
         </View>
       )}
       <StatusBar style="auto" />
+      {createFooter()}
     </View>
   );
 }
@@ -107,8 +117,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
+    //alignItems: 'center',
     justifyContent: 'space-evenly',
+  },
+  cardForm: {
+    flexGrow: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  footer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   libraryCardNumberInput: {
     // Numbers use 'pixel' as the metric
