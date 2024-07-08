@@ -4,7 +4,7 @@ A way to have your Toronto Public Library card handy when you accidentally leave
 
 Enter the number and have the barcode generated on your phone.
 
-The number is stored locally on your device - it is never sent to any server.
+The number is stored locally on your device/browser - it is never sent to any server.
 
 ## Notices/Disclaimers
 
