@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "build": "expo export:web && workbox-cli generateSW workbox-config.jsworkbox generateSW workbox-config.js",
+    "build": "expo export:web && npx workbox-cli generateSW workbox-config.jsworkbox generateSW workbox-config.js",
     "serve": "serve web-build --single",
     "start": "expo start",
     "web": "expo start --web",
@@ -19,8 +19,7 @@
     "react-dom": "18.2.0",
     "react-native": "0.72.10",
     "react-native-svg": "13.9.0",
-    "react-native-web": "~0.19.6",
-    "workbox-cli": "^7.1.0"
+    "react-native-web": "~0.19.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
