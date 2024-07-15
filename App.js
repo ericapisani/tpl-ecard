@@ -31,14 +31,16 @@ function createHeader() {
 function createFooter() {
   return (
     <View style={styles.footer}>
-      Created by a library enthusiast 📚 <br />
+      <Text>
+        Created by a library enthusiast 📚 <br />
+      </Text>
       <a href="https://github.com/ericapisani/tpl-ecard/">Source code can be found here</a>
     </View>
   );
 }
 
 export default function App() {
-  const [changedNumber, onChangeNumber] = useState(null);
+  const [changedNumber, onChangeNumber] = useState(123456789);
   const [state, dispatch] = useReducer(dataReducer, { libraryCardNumber: null });
 
   const { libraryCardNumber } = state;
